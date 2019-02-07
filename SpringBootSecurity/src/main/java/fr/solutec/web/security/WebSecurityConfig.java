@@ -2,7 +2,6 @@ package fr.solutec.web.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,7 +35,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
     }
-
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        // the boolean flags force the redirection even though 
+        // the user requested a specific secured resource.
+        http.formLogin().defaultSuccessUrl("/success.html", true);
+    }
+    /**
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -54,5 +59,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
             .and()
                 .sessionManagement().maximumSessions(1).expiredUrl("/login");
-    }
+    }*/
 }
