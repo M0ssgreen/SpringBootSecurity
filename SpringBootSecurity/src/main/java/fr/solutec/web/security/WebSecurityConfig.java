@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import fr.solutec.persistence.enums.RoleEnum;
@@ -26,21 +27,37 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         this.userDetailsService = userDetailsService;
     }
 
-    @Bean(name = "passwordEncoder")
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    @Autowired
-    public void configAuthentication(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    @Bean
+    public static NoOpPasswordEncoder noOpEncoder() {
+     return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
     }
+    
+    public void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.userDetailsService(userDetailsService).passwordEncoder(noOpEncoder());
+    }
+    
+    @Autowired
+    public void configureGlobal(AuthenticationManagerBuilder auth) 
+      throws Exception {
+        auth
+          .inMemoryAuthentication()
+          .withUser("user").password(noOpEncoder().encode("password")).roles("USER")
+          .and()
+          .withUser("admin").password(noOpEncoder().encode("admin")).roles("ADMIN");
+    }    
+    /**
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // the boolean flags force the redirection even though 
         // the user requested a specific secured resource.
         http.formLogin().defaultSuccessUrl("/success.html", true);
-    }
+    }*/
+    
     /**
     @Override
     protected void configure(HttpSecurity http) throws Exception {
