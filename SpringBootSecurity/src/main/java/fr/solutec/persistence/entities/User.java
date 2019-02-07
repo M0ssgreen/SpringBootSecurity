@@ -106,7 +106,7 @@ public class User implements UserDetails {
 
     private Collection<RoleEnum> getRoles() {
 		// TODO Auto-generated method stub
-		return null;
+		return roles;
 	}
 
 	public void setPassword(String password) {
@@ -118,13 +118,13 @@ public class User implements UserDetails {
 	@Override
 	public String getPassword() {
 		// TODO Auto-generated method stub
-		return null;
+		return password;
 	}
 
 	@Override
 	public String getUsername() {
 		// TODO Auto-generated method stub
-		return null;
+		return username;
 	}
 
 	@Override

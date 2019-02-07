@@ -40,7 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(noOpEncoder());
     }
-    
+    /**
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) 
       throws Exception {
@@ -49,7 +49,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
           .withUser("user").password(noOpEncoder().encode("password")).roles("USER")
           .and()
           .withUser("admin").password(noOpEncoder().encode("admin")).roles("ADMIN");
-    }    
+    }*/    
     /**
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -58,7 +58,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.formLogin().defaultSuccessUrl("/success.html", true);
     }*/
     
-    /**
+    
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
@@ -76,5 +76,5 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf()
             .and()
                 .sessionManagement().maximumSessions(1).expiredUrl("/login");
-    }*/
+    } 
 }
